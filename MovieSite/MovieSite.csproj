@@ -138,7 +138,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Genres.cs" />
-    <Compile Include="Models\Movies.cs" />
+    <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\PopularMovies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

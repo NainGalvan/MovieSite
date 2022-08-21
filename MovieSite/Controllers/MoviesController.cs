@@ -22,7 +22,58 @@ namespace MovieSite.Controllers
         string genreUrl = "https://api.themoviedb.org/3/genre/movie/list?api_key=1bea2c031daeaac81b81720c036771b4&language=en-US";
 
 
-        public ActionResult Popular()
+
+        public PopularMovies GetPopularMovies()
+        {
+            string baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key=1bea2c031daeaac81b81720c036771b4";
+            PopularMovies popular_movie_result = new PopularMovies();
+
+            var client1 = new HttpClient();
+            HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
+
+
+            if (res1.IsSuccessStatusCode)
+            {
+                var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
+
+
+                popular_movie_result = JsonConvert.DeserializeObject<PopularMovies>(MoviesResponse);
+
+
+            }
+            return popular_movie_result;
+        }
+
+        public List<Movie> GetMovie()
+        {
+            List<Movie> movies = new List<Movie>();
+            var popularMovies = GetPopularMovies();
+            foreach(var movie_result in popularMovies.results)
+            {
+                string baseUrl = "https://api.themoviedb.org/3/movie/" +  movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                Movie movie = new Movie();
+
+                var client1 = new HttpClient();
+                HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
+
+
+                if (res1.IsSuccessStatusCode)
+                {
+                    var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
+
+
+                    movie = JsonConvert.DeserializeObject<Movie>(MoviesResponse);
+                    movies.Add(movie);
+
+                }
+            }
+            return movies;
+
+
+
+        }
+
+        /*public ActionResult Popular()
         {
             string baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key=1bea2c031daeaac81b81720c036771b4";
             Movies result = new Movies();
@@ -41,7 +92,7 @@ namespace MovieSite.Controllers
 
             }
 
-            return View(result.results);
+            return View(result);
         }
 
         public ActionResult PopularByPage(int? pageNum)
@@ -64,7 +115,7 @@ namespace MovieSite.Controllers
 
             }
            
-            return View(result);
+            return View(result));
         }
 
         public ActionResult Genre()
@@ -84,7 +135,7 @@ namespace MovieSite.Controllers
             }
             return View(result);
 
-        }
+        }*/
     }
 
     

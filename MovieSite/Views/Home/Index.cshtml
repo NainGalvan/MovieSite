@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 <div class="row pt-3" >
-    @foreach (var movie in Model.Popular)
+    @foreach (var movie in Model.Movies)
     {
         <div class="col-md-3">
             <div class="card mb-2">
@@ -19,9 +19,9 @@
                     <li class="list-group-item">Votes: @movie.vote_count</li>
                     <li class="list-group-item">@(movie.vote_average*10)%</li>
                     @*where i left off*@
-                    <li class="list-group-item">
+                    @*<li class="list-group-item">
                         @string.Join(",", movie.genres)
-                    </li>
+                    </li>*@
                 </ul>
                 <div class="card-footer text-muted">
                     Released: @movie.release_date

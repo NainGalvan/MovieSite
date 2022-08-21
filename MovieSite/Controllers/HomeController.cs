@@ -20,14 +20,16 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
 
 
-            ViewResult viewResult1 = (ViewResult)new MoviesController().Genre();
+            model.Movies = new MoviesController().GetMovie();
+
+            /*ViewResult viewResult1 = (ViewResult)new MoviesController().Genre();
             
             ViewResult viewResult2 = (ViewResult)new MoviesController().Popular();
             model.Popular = viewResult2.Model;
-            model.Genre = viewResult1.Model;
+            model.Genre = viewResult1.Model;*/
 
 
-            foreach(var movie in model.Popular)
+            /*foreach(var movie in model.Popular)
             {
                 List<string> genres = new List<string>();
 
@@ -43,7 +45,7 @@ namespace MovieSite.Controllers
                         }
                       }
                 }
-            }
+            }*/
 
             return View(model);
         }
