@@ -1,9 +1,15 @@
 ﻿ @{
     ViewBag.Title = "Home Page";
 }
-<div class="row pt-3" >
+<h2>To view results click on one of the nav btns</h2>
+@*<div class="row pt-3" >
     @foreach (var movie in Model.Movies)
     {
+        List<string> genres = new List<string> ();
+        foreach(var genre in movie.genres)
+        {
+            genres.Add(genre.name);
+        }
         <div class="col-md-3">
             <div class="card mb-2">
                 <div class="card-body">
@@ -18,10 +24,11 @@
 
                     <li class="list-group-item">Votes: @movie.vote_count</li>
                     <li class="list-group-item">@(movie.vote_average*10)%</li>
-                    @*where i left off*@
-                    @*<li class="list-group-item">
-                        @string.Join(",", movie.genres)
-                    </li>*@
+                    <li class="list-group-item">@(movie.runtime)min</li>
+                    <li class="list-group-item">
+                        @string.Join(",", genres.ToArray())
+                        
+                    </li>
                 </ul>
                 <div class="card-footer text-muted">
                     Released: @movie.release_date
@@ -54,4 +61,4 @@
             <a class="page-link" href="#">&raquo;</a>
         </li>
     </ul>
-</div>
+</div>*@

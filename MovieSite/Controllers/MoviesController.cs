@@ -10,23 +10,49 @@ using MovieSite.Models;
 using Newtonsoft.Json;
 using PagedList.Mvc;
 using PagedList;
+using System.Dynamic;
 
 namespace MovieSite.Controllers
 {
     public class MoviesController : Controller
     {
         // GET: Movies
-
-        
-
-        string genreUrl = "https://api.themoviedb.org/3/genre/movie/list?api_key=1bea2c031daeaac81b81720c036771b4&language=en-US";
-
+        public ActionResult Index()
+        {
+            dynamic model = new ExpandoObject();
 
 
-        public PopularMovies GetPopularMovies()
+            model.Movies = GetPopularMovies();
+
+
+            return View(model);
+        }
+        public ActionResult TopRated()
+        {
+            dynamic model = new ExpandoObject();
+            model.TopRated = GetTopRated();
+            return View(model);
+        }
+        public ActionResult NowPlaying()
+        {
+
+            dynamic model = new ExpandoObject();
+            model.NowPlaying = GetNowPlaying();
+
+            return View(model);
+        }
+        public ActionResult UpComing()
+        {
+
+            dynamic model = new ExpandoObject();
+            model.UpComing = GetUpComing();
+
+            return View(model);
+        }
+        public List<Movie> GetPopularMovies()
         {
             string baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key=1bea2c031daeaac81b81720c036771b4";
-            PopularMovies popular_movie_result = new PopularMovies();
+            Movies popular_result = new Movies();
 
             var client1 = new HttpClient();
             HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
@@ -37,47 +63,39 @@ namespace MovieSite.Controllers
                 var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
 
 
-                popular_movie_result = JsonConvert.DeserializeObject<PopularMovies>(MoviesResponse);
+                popular_result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
 
 
             }
-            return popular_movie_result;
-        }
 
-        public List<Movie> GetMovie()
-        {
+            // Used to get more indepth information about the popular movies
             List<Movie> movies = new List<Movie>();
-            var popularMovies = GetPopularMovies();
-            foreach(var movie_result in popularMovies.results)
+            foreach (var movie_result in popular_result.results)
             {
-                string baseUrl = "https://api.themoviedb.org/3/movie/" +  movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
                 Movie movie = new Movie();
 
-                var client1 = new HttpClient();
-                HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
+                var client2 = new HttpClient();
+                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
 
 
-                if (res1.IsSuccessStatusCode)
+                if (res2.IsSuccessStatusCode)
                 {
-                    var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
+                    var response = res2.Content.ReadAsStringAsync().Result;
 
 
-                    movie = JsonConvert.DeserializeObject<Movie>(MoviesResponse);
+                    movie = JsonConvert.DeserializeObject<Movie>(response);
                     movies.Add(movie);
 
                 }
             }
             return movies;
-
-
-
         }
 
-        /*public ActionResult Popular()
+        public List<Movie> GetTopRated()
         {
-            string baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key=1bea2c031daeaac81b81720c036771b4";
-            Movies result = new Movies();
-
+            string baseUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=1bea2c031daeaac81b81720c036771b4";
+            Movies top_rated_result = new Movies();
             var client1 = new HttpClient();
             HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
 
@@ -87,20 +105,38 @@ namespace MovieSite.Controllers
                 var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
 
 
-                result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
+                top_rated_result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
 
 
             }
+            // Used to get more indepth information about the popular movies
+            List<Movie> movies = new List<Movie>();
+            foreach (var movie_result in top_rated_result.results)
+            {
+                string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                Movie movie = new Movie();
 
-            return View(result);
+                var client2 = new HttpClient();
+                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+
+
+                if (res2.IsSuccessStatusCode)
+                {
+                    var response = res2.Content.ReadAsStringAsync().Result;
+
+
+                    movie = JsonConvert.DeserializeObject<Movie>(response);
+                    movies.Add(movie);
+
+                }
+            }
+            return movies;
         }
 
-        public ActionResult PopularByPage(int? pageNum)
+        public List<Movie> GetNowPlaying()
         {
-            int page = (pageNum ?? 1);
-            string baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key=1bea2c031daeaac81b81720c036771b4&page=" + page;
-            Movies result = new Movies();
-
+            string baseUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=1bea2c031daeaac81b81720c036771b4";
+            Movies now_playin_result = new Movies();
             var client1 = new HttpClient();
             HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
 
@@ -110,20 +146,40 @@ namespace MovieSite.Controllers
                 var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
 
 
-                result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
+                now_playin_result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
 
 
             }
-           
-            return View(result));
+            // Used to get more indepth information about the popular movies
+            List<Movie> movies = new List<Movie>();
+            foreach (var movie_result in now_playin_result.results)
+            {
+                string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                Movie movie = new Movie();
+
+                var client2 = new HttpClient();
+                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+
+
+                if (res2.IsSuccessStatusCode)
+                {
+                    var response = res2.Content.ReadAsStringAsync().Result;
+
+
+                    movie = JsonConvert.DeserializeObject<Movie>(response);
+                    movies.Add(movie);
+
+                }
+            }
+            return movies;
         }
 
-        public ActionResult Genre()
+        public List<Movie> GetUpComing()
         {
-            Genres result = new Genres();
- 
+            string baseUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=1bea2c031daeaac81b81720c036771b4";
+            Movies up_coming_result = new Movies();
             var client1 = new HttpClient();
-            HttpResponseMessage res1 = client1.GetAsync(genreUrl).Result;
+            HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
 
 
             if (res1.IsSuccessStatusCode)
@@ -131,11 +187,33 @@ namespace MovieSite.Controllers
                 var MoviesResponse = res1.Content.ReadAsStringAsync().Result;
 
 
-                result = JsonConvert.DeserializeObject<Genres>(MoviesResponse);
-            }
-            return View(result);
+                up_coming_result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
 
-        }*/
+
+            }
+            // Used to get more indepth information about the popular movies
+            List<Movie> movies = new List<Movie>();
+            foreach (var movie_result in up_coming_result.results)
+            {
+                string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                Movie movie = new Movie();
+
+                var client2 = new HttpClient();
+                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+
+
+                if (res2.IsSuccessStatusCode)
+                {
+                    var response = res2.Content.ReadAsStringAsync().Result;
+
+
+                    movie = JsonConvert.DeserializeObject<Movie>(response);
+                    movies.Add(movie);
+
+                }
+            }
+            return movies;
+        }
     }
 
     

@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "TopRated";
+}
+
+<div class="row pt-3">
+    @foreach (var movie in Model.TopRated)
+    {
+        List<string> genres = new List<string>();
+        foreach (var genre in movie.genres)
+        {
+            genres.Add(genre.name);
+        }
+        <div class="col-md-3">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">@movie.title</h5>
+                </div>
+                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + movie.poster_path)" />
+
+                <div class="card-body">
+                    <p class="card-text">@movie.overview</p>
+                </div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item">Votes: @movie.vote_count</li>
+                    <li class="list-group-item">@(movie.vote_average*10)%</li>
+                    <li class="list-group-item">@(movie.runtime)min</li>
+                    <li class="list-group-item">
+                        @string.Join(",", genres.ToArray())
+
+                    </li>
+                </ul>
+                <div class="card-footer text-muted">
+                    Released: @movie.release_date
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
