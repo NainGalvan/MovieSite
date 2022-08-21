@@ -1,0 +1,57 @@
+﻿ @{
+    ViewBag.Title = "Home Page";
+}
+<div class="row pt-3" >
+    @foreach (var movie in Model.Popular)
+    {
+        <div class="col-md-3">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">@movie.title</h5>
+                </div>
+                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + movie.poster_path)" />
+
+                <div class="card-body">
+                    <p class="card-text">@movie.overview</p>
+                </div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item">Votes: @movie.vote_count</li>
+                    <li class="list-group-item">@(movie.vote_average*10)%</li>
+                    @*where i left off*@
+                    <li class="list-group-item">
+                        @string.Join(",", movie.genres)
+                    </li>
+                </ul>
+                <div class="card-footer text-muted">
+                    Released: @movie.release_date
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div>
+    <ul class="pagination">
+        <li class="page-item disabled">
+            <a class="page-link" href="#">&laquo;</a>
+        </li>
+        <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">4</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">5</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">&raquo;</a>
+        </li>
+    </ul>
+</div>
