@@ -16,11 +16,11 @@ namespace MovieSite.Controllers
     {
         public ActionResult Index()
         {
-            dynamic model = new ExpandoObject();
+           /* dynamic model = new ExpandoObject();
 
-            model.Movies = new MoviesController().GetPopularMovies();
+            model.Movies = new MoviesController().GetPopularMovies();*/
 
-            return View(model);
+            return View();
         }
     }
 }

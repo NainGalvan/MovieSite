@@ -22,7 +22,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
 
 
-            model.Movies = GetPopularMovies();
+            model.Movies = GetMovies("popular");
 
 
             return View(model);
@@ -30,14 +30,14 @@ namespace MovieSite.Controllers
         public ActionResult TopRated()
         {
             dynamic model = new ExpandoObject();
-            model.TopRated = GetTopRated();
+            model.TopRated = GetMovies("top_rated");
             return View(model);
         }
         public ActionResult NowPlaying()
         {
 
             dynamic model = new ExpandoObject();
-            model.NowPlaying = GetNowPlaying();
+            model.NowPlaying = GetMovies("now_playing");
 
             return View(model);
         }
@@ -45,11 +45,47 @@ namespace MovieSite.Controllers
         {
 
             dynamic model = new ExpandoObject();
-            model.UpComing = GetUpComing();
+            model.UpComing = GetMovies("upcoming");
 
             return View(model);
         }
-        public List<Movie> GetPopularMovies()
+
+        public List<Movie> GetMovies(string search) 
+        {
+            string baseUrl = "https://api.themoviedb.org/3/movie/" + search + "?api_key=1bea2c031daeaac81b81720c036771b4";
+            Movies result = new Movies();
+
+            var client = new HttpClient();
+            HttpResponseMessage res = client.GetAsync(baseUrl).Result;
+
+            if (res.IsSuccessStatusCode)
+            {
+                var MoviesResponse = res.Content.ReadAsStringAsync().Result;
+                result = JsonConvert.DeserializeObject<Movies>(MoviesResponse);
+            }
+
+            // Used to get more indepth information about the popular movies
+            List<Movie> movies = new List<Movie>();
+            foreach (var movie_result in result.results)
+            {
+                string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                Movie movie = new Movie();
+
+                var client2 = new HttpClient();
+                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+
+                if (res2.IsSuccessStatusCode)
+                {
+                    var response = res2.Content.ReadAsStringAsync().Result;
+                    movie = JsonConvert.DeserializeObject<Movie>(response);
+                    movies.Add(movie);
+
+                }
+            }
+            return movies;
+
+        }
+        /*public List<Movie> GetPopularMovies()
         {
             string baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key=1bea2c031daeaac81b81720c036771b4";
             Movies popular_result = new Movies();
@@ -212,9 +248,7 @@ namespace MovieSite.Controllers
 
                 }
             }
-            return movies;
-        }
+            return movies;*/
     }
-
-    
 }
+
