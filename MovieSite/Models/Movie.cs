@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MovieSite.Models
 {
-
+    // Used to get more in depth information about a movie through the movie id
     public class Movie
     {
         public bool adult { get; set; }

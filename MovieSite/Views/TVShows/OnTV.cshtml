@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "OnTV";
+}
+
+<div class="row pt-3">
+    @foreach (var show in Model.OnTV)
+    {
+        List<string> genres = new List<string>();
+        foreach (var genre in show.genres)
+        {
+            genres.Add(genre.name);
+        }
+
+        <div class="col-md-3">
+            <div class="card mb-2" role="button" onclick="location.href='@Url.Action("Watch", "TVShows", new { id=show.id })'">
+                <div class="card-body">
+                    <h5 class="card-title">@show.name</h5>
+                </div>
+                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + show.poster_path)" />
+
+                <div class="card-body">
+                    <p class="card-text">@show.overview</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Seasons: @show.number_of_seasons</li>
+                    <li class="list-group-item">Episodes: @show.number_of_episodes</li>
+  
+                    <li class="list-group-item">@(show.vote_average * 10)%</li>
+                    <li class="list-group-item">
+                        @if (show.episode_run_time.Length != 0)
+                        {
+                             @("RunTime:" + show.episode_run_time[0].ToString() + "min")
+                        }
+                        else
+                        {
+                             @("RunTime:" + 0.ToString() + "min")
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        @string.Join(",", genres.ToArray())
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    }
+</div>
+
