@@ -18,11 +18,11 @@ namespace MovieSite
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-            routes.MapRoute(
+           /* routes.MapRoute(
                 name: "Show",
                 url: "{controller}/{action}/{show}",
                defaults: new { controller = "TVShows", action = "Watch", id = UrlParameter.Optional }
-            );
+            );*/
         }
     }
 }

@@ -3,47 +3,61 @@
     ViewBag.Title = "Index";
 }
 
+@*<div class="row row-cols-1 row-cols-md-3">
 
-<div class="row pt-3">
-    @foreach (var show in Model.Shows)
+    @foreach (var show in Model)
     {
         List<string> genres = new List<string>();
         foreach (var genre in show.genres)
         {
             genres.Add(genre.name);
         }
-         
-        <div class="col-md-3">
-            <div class="card mb-2" role="button" onclick="location.href='@Url.Action("Watch", "TVShows", new { id=show.id })'">
-                <div class="card-body">
-                    <h5 class="card-title">@show.name</h5>
-                </div>
-                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + show.poster_path)" />
+        <div class="col mb-4">
 
+            <div class="card h-100" role="button" onclick="location.href='@Url.Action("Watch", "TVShows", new { id=show.id})'">
+
+                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + show.poster_path)" />
                 <div class="card-body">
                     <p class="card-text">@show.overview</p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Seasons: @show.number_of_seasons</li>
                     <li class="list-group-item">Episodes: @show.number_of_episodes</li>
-                    <li class="list-group-item">Votes: @show.vote_count</li>
-                    <li class="list-group-item">@(show.vote_average * 10)%</li>
+                    <li class="list-group-item">UserScore: @(show.vote_average*10)%</li>
                     <li class="list-group-item">
                         @if (show.episode_run_time.Length != 0)
                         {
-                            @("RunTime:" + show.episode_run_time[0].ToString() + "min")
+                            @("RunTime: " + show.episode_run_time[0].ToString() + "min")
                         }
                         else
                         {
-                            @("RunTime:" + 0.ToString() + "min")
+                            @("RunTime: " + 0.ToString() + "min")
                         }
                     </li>
                     <li class="list-group-item">
                         @string.Join(",", genres.ToArray())
+
                     </li>
                 </ul>
+
             </div>
         </div>
-        
-        }
+    }
 </div>
+<div>
+    <ul class="pagination pagination-lg">
+        <li class="@(Model.IsFirstPage? "page-item disabled" : "page-item ")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">&laquo;</a>
+        </li>
+        @for (int i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="@(i == Model.PageNumber ? "page-item active" : "page-item")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+
+        }
+        <li class="@(Model.IsLastPage ? "page-item disabled" : "page-item")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">&raquo;</a>
+        </li>
+    </ul>
+</div>*@

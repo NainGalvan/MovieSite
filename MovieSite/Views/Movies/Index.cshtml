@@ -1,30 +1,30 @@
-﻿
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<MovieSite.Models.Movie>
 @{
     ViewBag.Title = "Index";
 }
 
-<div class="row pt-3">
-    @foreach (var movie in Model.Movies)
+
+
+@*<div class="row row-cols-1 row-cols-md-3">
+    @foreach (var movie in Model)
     {
         List<string> genres = new List<string>();
         foreach (var genre in movie.genres)
         {
             genres.Add(genre.name);
         }
-        <div class="col-md-3">
-            <div class="card mb-2">
-                <div class="card-body">
-                    <h5 class="card-title">@movie.title</h5>
-                </div>
-                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + movie.poster_path)" />
+        <div class="col mb-4">
 
+            <div class="card h-100" role="button" onclick="location.href='@Url.Action("Watch", "Movies", new { id=movie.id })'">
+
+                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + movie.poster_path)" />
                 <div class="card-body">
                     <p class="card-text">@movie.overview</p>
                 </div>
                 <ul class="list-group list-group-flush">
-
-                    <li class="list-group-item">Votes: @movie.vote_count</li>
-                    <li class="list-group-item">@(movie.vote_average*10)%</li>
+                    <li class="list-group-item">UserScore: @(movie.vote_average*10)%</li>
                     <li class="list-group-item">RunTime: @(movie.runtime)min</li>
                     <li class="list-group-item">
                         @string.Join(",", genres.ToArray())
@@ -37,5 +37,24 @@
             </div>
         </div>
     }
-</div>
+</div>*@
+
+@*<div>
+    <ul class="pagination pagination-lg">
+        <li class="@(Model.IsFirstPage? "page-item disabled" : "page-item ")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">&laquo;</a>
+        </li>
+        @for (int i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="@(i == Model.PageNumber ? "page-item active" : "page-item")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+
+        }
+        <li class="@(Model.IsLastPage ? "page-item disabled" : "page-item")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" >&raquo;</a>
+        </li>
+    </ul>
+</div>*@
+
 

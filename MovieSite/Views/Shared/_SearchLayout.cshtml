@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = Html.ViewContext.RouteData.Values["action"];
+}
+
+    <div class="row row-cols-1 row-cols-md-3">
+        @foreach (var item in Model)
+        {
+            
+            List<string> genres = new List<string>();
+            foreach (var genre in item.genres)
+            {
+                genres.Add(genre.name);
+            }
+            <div class="col mb-4">
+
+                <div class="card h-100" role="button" onclick="location.href='@Url.Action("Watch", "Movies", new { id = item.id })'">
+
+                    <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + item.poster_path)" />
+                    <div class="card-body">
+                        <p class="card-text">@item.overview</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">UserScore: @(item.vote_average * 10)%</li>
+                        <li class="list-group-item">RunTime: @(item.runtime)min</li>
+                        <li class="list-group-item">
+                            @string.Join(",", genres.ToArray())
+
+                        </li>
+                    </ul>
+                    <div class="card-footer text-muted">
+                        Released: @item.release_date
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div>
+        <ul class="pagination pagination-lg">
+            <li class="@(Model.Page == 1 ? "page-item disabled" : "page-item ")">
+                <a class="page-link" href="@Url.Action((string)Html.ViewContext.RouteData.Values["action"], new { query = Model.query, page = Model.Page - 1 })">&laquo;</a>
+            </li>
+            @for (int i = 1; i <= 10; i++)
+            {
+                <li class="@(i == Model.Page ? "page-item active" : "page-item")">
+                    <a class="page-link" href="@Url.Action((string)Html.ViewContext.RouteData.Values["action"], new { query = Model.query, page = i })">@i</a>
+                </li>
+
+            }
+            <li class="@(Model.Page == Model.Total_Page ? "page-item disabled" : "page-item")">
+                <a class="page-link" href="@Url.Action((string)Html.ViewContext.RouteData.Values["action"], new { query = Model.query, page = Model.Page + 1 })">&raquo;</a>
+            </li>
+        </ul>
+    </div>

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Watch";
+}
+
+
+<div class="d-flex justify-content-center">
+   
+            <div class="card w-50 ">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Movie.title</h5>
+                </div>
+                <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + Model.Movie.poster_path)" />
+                <div class="card-body">
+                    <p class="card-text">@Model.Movie.overview</p>
+                </div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item">Links: </li>
+
+                </ul>
+            </div>
+</div>
+
+
+
+

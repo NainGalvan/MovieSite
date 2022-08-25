@@ -8,6 +8,8 @@ namespace MovieSite.Models
     // Used to get more in depth information about a movie through the movie id
     public class Movie
     {
+        public int page { get; set; }
+        public int total_pages { get; set; }
         public bool adult { get; set; }
         public string backdrop_path { get; set; }
         public Belongs_To_Collection belongs_to_collection { get; set; }

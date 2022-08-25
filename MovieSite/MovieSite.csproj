@@ -237,6 +237,10 @@
     <Content Include="Views\TVShows\TopRated.cshtml" />
     <Content Include="Views\TVShows\AiringToday.cshtml" />
     <Content Include="Views\TVShows\OnTV.cshtml" />
+    <Content Include="Views\Movies\Watch.cshtml" />
+    <Content Include="Views\Shared\_MovieLayout.cshtml" />
+    <Content Include="Views\Shared\_TvShowLayout.cshtml" />
+    <Content Include="Views\Shared\_SearchLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,10 +1,9 @@
-﻿
-@{
+﻿ @{
     ViewBag.Title = "AiringToday";
 }
 
-<div class="row pt-3">
-    @foreach (var show in Model.AiringToday)
+@*<div class="row row-cols-1 row-cols-md-3">
+    @foreach (var show in Model)
     {
         List<string> genres = new List<string>();
         foreach (var genre in show.genres)
@@ -12,8 +11,8 @@
             genres.Add(genre.name);
         }
 
-        <div class="col-md-3">
-            <div class="card mb-2" role="button" onclick="location.href='@Url.Action("Watch", "TVShows", new { id=show.id })'">
+        <div class="col mb-3">
+            <div class="card h-100" role="button" onclick="location.href='@Url.Action("Watch", "TVShows", new { id=show.id })'">
                 <div class="card-body">
                     <h5 class="card-title">@show.name</h5>
                 </div>
@@ -30,11 +29,11 @@
                     <li class="list-group-item">
                         @if (show.episode_run_time.Length != 0)
                         {
-                            @("RunTime:" + show.episode_run_time[0].ToString() + "min")
+                            @("RunTime: " + show.episode_run_time[0].ToString() + "min")
                         }
                         else
                         {
-                            @("RunTime:" + 0.ToString() + "min")
+                            @("RunTime: " + 0.ToString() + "min")
                         }
                     </li>
                     <li class="list-group-item">
@@ -46,4 +45,21 @@
 
     }
 </div>
+<div>
+    <ul class="pagination pagination-lg">
+        <li class="@(Model.IsFirstPage? "page-item disabled" : "page-item ")">
+            <a class="page-link" href="@Url.Action("AiringToday", new { page = Model.PageNumber - 1 })">&laquo;</a>
+        </li>
+        @for (int i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="@(i == Model.PageNumber ? "page-item active" : "page-item")">
+                <a class="page-link" href="@Url.Action("AiringToday", new { page = i })">@i</a>
+            </li>
 
+        }
+        <li class="@(Model.IsLastPage ? "page-item disabled" : "page-item")">
+            <a class="page-link" href="@Url.Action("AiringToday", new { page = Model.PageNumber + 1 })">&raquo;</a>
+        </li>
+    </ul>
+</div>
+*@

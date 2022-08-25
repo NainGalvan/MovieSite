@@ -16,6 +16,7 @@ namespace MovieSite.Models
         public int id { get; set; }
         public string poster_path { get; set; }
         public int season_number { get; set; }
+
     }
 
     public class Episode
