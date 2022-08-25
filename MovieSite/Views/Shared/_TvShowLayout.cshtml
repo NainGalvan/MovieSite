@@ -17,9 +17,9 @@
                 <div class="card-body">
                     <h5 class  ="card-title">@show.name</h5>
                 </div>
-                @if (show.still_path != null)
+                @if (show.poster_path != null)
                 {
-                    <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + show.still_path)" />
+                    <img class="card-img" src="@Url.Content("https://image.tmdb.org/t/p/w500/" + show.poster_path)" />
                 }
                 else
                 {

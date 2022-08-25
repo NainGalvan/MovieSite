@@ -25,19 +25,38 @@ namespace MovieSite.Controllers
 
         public ActionResult Search(string query, int?page)
         {
-            dynamic model = new ExpandoObject();
+         dynamic model = new ExpandoObject();
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            string baseUrl = "https://api/themoviedb.org/3/search/muli" + "?api_key=1bea2c031daeaac81b81720c036771b4&" + query + "&page=" + page;
-            
-            TVShows resultShow = new TVShows();
+            string baseUrl = "https://api.themoviedb.org/3/search/multi?api_key=1bea2c031daeaac81b81720c036771b4&query=" + query + "&page=" + pageIndex;
+
+            Search searchResult = new Search();
             var client1 = new HttpClient();
             HttpResponseMessage res1 = client1.GetAsync(baseUrl).Result;
             if (res1.IsSuccessStatusCode)
             {
                 var response = res1.Content.ReadAsStringAsync().Result;
-/*                resultShow = JsonConvert.DeserializeObject<TVShows>(response);
-*/            }
+                searchResult = JsonConvert.DeserializeObject<Search>(response);
+            }
+
+            List<Object> resultList = new List<Object>();
+
+            foreach(var item in searchResult.results)
+            {
+                if(item.media_type == "tv")
+                {
+                    resultList.Add(new TVShowsController().GetShowDetail(item.id.ToString()));
+                } else
+                {
+                    resultList.Add(new MoviesController().GetMovieDetails(item.id.ToString()));
+                }
+            }
+
+            model.Query = query;
+            model.Page = searchResult.page;
+            model.Total_Page = searchResult.total_pages;
+            model.Item = resultList;
+            return View("_SearchLayout", model);
 
            /* model.Page = resultShow.page;
             model.Total_Page = resultShow.total_pages;

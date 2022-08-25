@@ -27,7 +27,7 @@ namespace MovieSite.Controllers
 
             model.Page = movies.page;
             model.Total_Page = 10;
-            model.Movies = GetMovieDetails(movies);
+            model.Movies = GetMoviesDetails(movies);
 
             
             return View("_movieLayout",model);
@@ -38,7 +38,7 @@ namespace MovieSite.Controllers
             var TopRated = GetMovies("top_rated",page);
             model.Page = TopRated.page;
             model.Total_Page = 10;
-            model.Movies = GetMovieDetails(TopRated);
+            model.Movies = GetMoviesDetails(TopRated);
 
             
             return View("_movieLayout", model);
@@ -51,7 +51,7 @@ namespace MovieSite.Controllers
             var NowPlaying = GetMovies("now_playing",page);
             model.Page = NowPlaying.page;
             model.Total_Page = 10;
-            model.Movies = GetMovieDetails(NowPlaying);
+            model.Movies = GetMoviesDetails(NowPlaying);
 
 
             return View("_movieLayout", model);
@@ -63,7 +63,7 @@ namespace MovieSite.Controllers
             var UpComing = GetMovies("upcoming",page);
             model.Page = UpComing.page;
             model.Total_Page = 10;
-            model.Movies = GetMovieDetails(UpComing);
+            model.Movies = GetMoviesDetails(UpComing);
 
 
             return View("_movieLayout", model);
@@ -89,8 +89,25 @@ namespace MovieSite.Controllers
             return View(model);
         }
 
+        public Movie GetMovieDetails(string id)
+        {
+            string detailUrl = "https://api.themoviedb.org/3/movie/" + id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+            Movie movie = new Movie();
+
+
+            var client2 = new HttpClient();
+            HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+
+            if (res2.IsSuccessStatusCode)
+            {
+                var response = res2.Content.ReadAsStringAsync().Result;
+                movie = JsonConvert.DeserializeObject<Movie>(response);
+
+            }
+            return movie;
+        }
         
-        public List<Movie> GetMovieDetails(Movies result)
+        public List<Movie> GetMoviesDetails(Movies result)
         {
             // Used to get more indepth information about the popular movies
             List<Movie> movies = new List<Movie>();
@@ -107,8 +124,6 @@ namespace MovieSite.Controllers
                 {
                     var response = res2.Content.ReadAsStringAsync().Result;
                     movie = JsonConvert.DeserializeObject<Movie>(response);
-                    movie.page = result.page;
-                    movie.total_pages = result.total_pages;
                     movies.Add(movie);
 
                 }

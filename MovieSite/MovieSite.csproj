@@ -141,6 +141,7 @@
     <Compile Include="Models\Genres.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Movies.cs" />
+    <Compile Include="Models\Search.cs" />
     <Compile Include="Models\TVShow.cs" />
     <Compile Include="Models\TVShowEpisode.cs" />
     <Compile Include="Models\TVShows.cs" />
