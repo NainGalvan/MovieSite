@@ -26,7 +26,7 @@ namespace MovieSite.Controllers
             var movies = GetMovies("popular",page);
 
             model.Page = movies.page;
-            model.Total_Page = 10;
+            model.Total_Page = movies.total_pages;
             model.Movies = GetMoviesDetails(movies);
 
             
@@ -37,7 +37,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
             var TopRated = GetMovies("top_rated",page);
             model.Page = TopRated.page;
-            model.Total_Page = 10;
+            model.Total_Page = TopRated.total_pages;
             model.Movies = GetMoviesDetails(TopRated);
 
             
@@ -50,7 +50,7 @@ namespace MovieSite.Controllers
   
             var NowPlaying = GetMovies("now_playing",page);
             model.Page = NowPlaying.page;
-            model.Total_Page = 10;
+            model.Total_Page = NowPlaying.total_pages;
             model.Movies = GetMoviesDetails(NowPlaying);
 
 
@@ -62,7 +62,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
             var UpComing = GetMovies("upcoming",page);
             model.Page = UpComing.page;
-            model.Total_Page = 10;
+            model.Total_Page = UpComing.total_pages;
             model.Movies = GetMoviesDetails(UpComing);
 
 
@@ -111,23 +111,25 @@ namespace MovieSite.Controllers
         {
             // Used to get more indepth information about the popular movies
             List<Movie> movies = new List<Movie>();
-            foreach (var movie_result in result.results)
-            {
-                string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
-                Movie movie = new Movie();
+            if(result.results != null ) { 
+                foreach (var movie_result in result.results)
+                {
+                    string detailUrl = "https://api.themoviedb.org/3/movie/" + movie_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                    Movie movie = new Movie();
                 
 
-                var client2 = new HttpClient();
-                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+                    var client2 = new HttpClient();
+                    HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
 
-                if (res2.IsSuccessStatusCode)
-                {
-                    var response = res2.Content.ReadAsStringAsync().Result;
-                    movie = JsonConvert.DeserializeObject<Movie>(response);
-                    movies.Add(movie);
+                    if (res2.IsSuccessStatusCode)
+                    {
+                        var response = res2.Content.ReadAsStringAsync().Result;
+                        movie = JsonConvert.DeserializeObject<Movie>(response);
+                        movies.Add(movie);
 
+                    }
                 }
-            }
+            } 
             return movies;
         }
         public Movies GetMovies(string search, int?page) 

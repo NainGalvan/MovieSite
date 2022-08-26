@@ -19,7 +19,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
             var Shows = GetTVShows("popular",page);
             model.Page = Shows.page;
-            model.Total_Page = 10;
+            model.Total_Page = Shows.total_pages;
             model.Shows = GetTVShowsDetail(Shows);
             return View("_TvShowLayout",model);
         }
@@ -28,7 +28,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
             var TopRated = GetTVShows("top_rated",page);
             model.Page = TopRated.page;
-            model.Total_Page = 10;
+            model.Total_Page = TopRated.total_pages;
             model.Shows = GetTVShowsDetail(TopRated);
             return View("_TvShowLayout",model);
         }
@@ -37,7 +37,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
             var AiringToday = GetTVShows("airing_today", page);
             model.Page = AiringToday.page;
-            model.Total_Page = 10;
+            model.Total_Page = AiringToday.total_pages ;
             model.Shows = GetTVShowsDetail(AiringToday);
             return View("_TvShowLayout",model);
         }
@@ -46,7 +46,7 @@ namespace MovieSite.Controllers
             dynamic model = new ExpandoObject();
             var OnTV = GetTVShows("on_the_air",page);
             model.Page = OnTV.page;
-            model.Total_Page = 10;
+            model.Total_Page = OnTV.total_pages;
             model.Shows = GetTVShowsDetail(OnTV);
             return View("_TvShowLayout", model);
         }
@@ -119,21 +119,23 @@ namespace MovieSite.Controllers
         public List<TVShow> GetTVShowsDetail(TVShows result)
         {
             List<TVShow> shows = new List<TVShow>();
-
-            foreach (var show_result in result.results)
+            if (result.total_results != null)
             {
-                string detailUrl = "https://api.themoviedb.org/3/tv/" + show_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
-                TVShow show = new TVShow();
-
-                var client2 = new HttpClient();
-                HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
-
-                if (res2.IsSuccessStatusCode)
+                foreach (var show_result in result.results)
                 {
-                    var response = res2.Content.ReadAsStringAsync().Result;
-                    show = JsonConvert.DeserializeObject<TVShow>(response);
-                    shows.Add(show);
+                    string detailUrl = "https://api.themoviedb.org/3/tv/" + show_result.id + "?api_key=1bea2c031daeaac81b81720c036771b4";
+                    TVShow show = new TVShow();
 
+                    var client2 = new HttpClient();
+                    HttpResponseMessage res2 = client2.GetAsync(detailUrl).Result;
+
+                    if (res2.IsSuccessStatusCode)
+                    {
+                        var response = res2.Content.ReadAsStringAsync().Result;
+                        show = JsonConvert.DeserializeObject<TVShow>(response);
+                        shows.Add(show);
+
+                    }
                 }
             }
             return shows;
